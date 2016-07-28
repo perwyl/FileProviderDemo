@@ -1,0 +1,6 @@
+framework module Pods_fileProviderDemoTests {
+  umbrella header "Pods-fileProviderDemoTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,15 @@
+PODS:
+  - FileProvider (0.3.0)
+  - SCLAlertView (0.5.9)
+
+DEPENDENCIES:
+  - FileProvider
+  - SCLAlertView
+
+SPEC CHECKSUMS:
+  FileProvider: 98052d0672ee3b8b400cabfd6d45769dfc4206e7
+  SCLAlertView: d7c6a48c7d340e60206d4ed0e8ebcbff3b9d2a44
+
+PODFILE CHECKSUM: 0820c8ce2d5cff0cebca8fd53333be3d4b1ca343
+
+COCOAPODS: 1.0.1

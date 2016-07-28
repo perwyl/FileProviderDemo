@@ -1,0 +1,6 @@
+framework module FileProvider {
+  umbrella header "FileProvider-umbrella.h"
+
+  export *
+  module * { export * }
+}
