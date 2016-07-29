@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -17,8 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="bottom" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Rai-Ys-xZE">
-                                <rect key="frame" x="226" y="235" width="149" height="130"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" alignment="bottom" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Rai-Ys-xZE">
+                                <rect key="frame" x="226" y="235" width="149" height="180"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Ot-2g-0yf">
                                         <rect key="frame" x="23" y="0.0" width="126" height="30"/>
@@ -31,11 +32,18 @@
                                         <rect key="frame" x="0.0" y="50" width="149" height="30"/>
                                         <state key="normal" title="WebDAV File Provider"/>
                                         <connections>
-                                            <segue destination="B3o-w8-dfy" kind="show" identifier="segueToWebDAVList" id="pOu-V4-KDJ"/>
+                                            <segue destination="B3o-w8-dfy" kind="show" identifier="segueToWebDAVList" animates="NO" id="pOu-V4-KDJ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iFh-ke-ifE">
+                                        <rect key="frame" x="45" y="100" width="104" height="30"/>
+                                        <state key="normal" title="WebDAV Detail"/>
+                                        <connections>
+                                            <segue destination="SFT-8D-DeK" kind="show" identifier="segueToWebDAVDetail" id="UJ2-Vt-YaF"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TJW-po-4Ig">
-                                        <rect key="frame" x="28" y="100" width="121" height="30"/>
+                                        <rect key="frame" x="28" y="150" width="121" height="30"/>
                                         <state key="normal" title="SMB File Provider"/>
                                     </button>
                                 </subviews>
@@ -47,13 +55,15 @@
                             <constraint firstItem="Rai-Ys-xZE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="zIS-lb-Pjc"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="wA0-ap-aDl"/>
+                    <navigationItem key="navigationItem" id="wA0-ap-aDl">
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="a2j-dc-7T0"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1102" y="587"/>
         </scene>
-        <!--WebDAVTVC-->
+        <!--Title-->
         <scene sceneID="mg2-Wb-cld">
             <objects>
                 <tableViewController id="B3o-w8-dfy" customClass="WebDAVTVC" customModule="fileProviderDemo" customModuleProvider="target" sceneMemberID="viewController">
@@ -76,17 +86,22 @@
                             <outlet property="delegate" destination="B3o-w8-dfy" id="y4G-td-sl5"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem title="Connect" id="bzV-Gy-rJH"/>
-                    </toolbarItems>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Title" id="WSb-yB-4FY">
+                        <barButtonItem key="rightBarButtonItem" title="Connect" id="02V-OL-cal">
+                            <connections>
+                                <action selector="btnConnectSelected:" destination="B3o-w8-dfy" id="FR0-k5-H1F"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="SFT-8D-DeK" kind="show" identifier="segueToWebDAVDetail" id="sUd-CE-RfX"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MDG-3G-PLJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1868" y="612"/>
+            <point key="canvasLocation" x="1876" y="587"/>
         </scene>
         <!--WebDAV DetailVC-->
         <scene sceneID="5Nx-VV-5hz">
@@ -99,12 +114,51 @@
                     <view key="view" contentMode="scaleToFill" id="apR-0d-W3k">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ei8-RC-X3i">
+                                <rect key="frame" x="40" y="273" width="520" height="307"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TeU-sa-cRb">
+                                <rect key="frame" x="40" y="84" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="U7D-Yz-BOI">
+                                <rect key="frame" x="40" y="125" width="520" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="EZb-uN-2AY"/>
+                                </constraints>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Ei8-RC-X3i" firstAttribute="top" secondItem="U7D-Yz-BOI" secondAttribute="bottom" constant="20" id="284-1E-fp8"/>
+                            <constraint firstItem="TeU-sa-cRb" firstAttribute="top" secondItem="ZWp-O6-mvH" secondAttribute="bottom" constant="20" id="2vk-Uo-jnL"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ei8-RC-X3i" secondAttribute="trailing" constant="20" id="4hM-QJ-UNA"/>
+                            <constraint firstItem="eib-wa-UpF" firstAttribute="top" secondItem="Ei8-RC-X3i" secondAttribute="bottom" constant="20" id="Ys6-2P-g7S"/>
+                            <constraint firstItem="TeU-sa-cRb" firstAttribute="leading" secondItem="apR-0d-W3k" secondAttribute="leadingMargin" constant="20" id="abC-Ph-tFP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="U7D-Yz-BOI" secondAttribute="trailing" constant="20" id="cgp-IV-BWS"/>
+                            <constraint firstItem="U7D-Yz-BOI" firstAttribute="top" secondItem="TeU-sa-cRb" secondAttribute="bottom" constant="20" id="e1P-rw-s9b"/>
+                            <constraint firstItem="U7D-Yz-BOI" firstAttribute="top" secondItem="TeU-sa-cRb" secondAttribute="bottom" constant="20" id="m7g-bf-IpN"/>
+                            <constraint firstItem="Ei8-RC-X3i" firstAttribute="leading" secondItem="apR-0d-W3k" secondAttribute="leadingMargin" constant="20" id="uh8-te-fB5"/>
+                            <constraint firstItem="U7D-Yz-BOI" firstAttribute="leading" secondItem="apR-0d-W3k" secondAttribute="leadingMargin" constant="20" id="zSj-wg-qwM"/>
+                            <constraint firstItem="Ei8-RC-X3i" firstAttribute="top" secondItem="U7D-Yz-BOI" secondAttribute="bottom" constant="20" id="zp4-hu-Eba"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="imgView" destination="Ei8-RC-X3i" id="fEY-hr-X1V"/>
+                        <outlet property="lblMsg" destination="TeU-sa-cRb" id="O2g-e5-s81"/>
+                        <outlet property="txtView" destination="U7D-Yz-BOI" id="SyC-Ue-ZQU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P7v-Ex-oka" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2638" y="577"/>
+            <point key="canvasLocation" x="1838" y="1358"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="N5E-xO-sPG">
@@ -174,4 +228,7 @@
             <point key="canvasLocation" x="372" y="587"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="UJ2-Vt-YaF"/>
+    </inferredMetricsTieBreakers>
 </document>

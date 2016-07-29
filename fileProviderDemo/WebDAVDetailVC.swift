@@ -12,22 +12,88 @@ import FileProvider
 
 class WebDAVDetailVC: UIViewController {
     
+    
+    @IBOutlet weak var imgView: UIImageView!
+    
+    var fileObject: FileObject!
+    
     var username:String!
     var password:String!
     var path:String!
+    var ipAddress:String!
+    var folderPath:String!
+    
+    var fileProvider: WebDAVFileProvider!
+    
+    var img:UIImage?
+    
+    @IBOutlet weak var lblMsg: UILabel!
+    @IBOutlet weak var txtView: UITextView!
+    
     
     override func viewDidLoad() {
         
+        
+        #if PERWYL
+            username = "algoaccess"
+            password = "algoaccess123"
+            ipAddress = "192.168.1.127"
+            folderPath = "AlgoAccess"
+        #endif
+        
+        path = ("http://\(ipAddress)/\(folderPath)")
+        
+        setupWebDAV()
+        
+        getFileObject()
     }
     
     
-    
-    func setupWebDAV(username _name:String?, password _pwd:String?, path _path:String?){
+    func setupWebDAV(){
         
-        username = _name
-        password = _pwd
-        path = _path
+        let credential = NSURLCredential(user: username, password: password, persistence: NSURLCredentialPersistence.Permanent)
+        fileProvider = WebDAVFileProvider(baseURL: NSURL(string: path)!, credential: credential)
         
     }
+    
+    
+    func getFileObject(){
+        
+        var tempPath:String!
+        
+        if fileObject == nil {
+            tempPath = ("\(path)/temp.jpg")
+        }else {
+            tempPath = fileObject.path
+        }
+        
+        fileProvider.contentsAtPath(tempPath) { (contents, error) in
+            
+            dispatch_async(dispatch_get_main_queue(),{
+                if (error != nil) {
+                    
+                    self.txtView.text = error.debugDescription
+                    
+                }else {
+                    
+                    if let img = UIImage(data: contents!){
+                        
+                        self.lblMsg.text = "Image File"
+                        self.imgView.image = img
+                    }else {
+                        
+                        self.lblMsg.text = "Not Image File"
+                    }
+                    
+                    self.txtView.text = contents.debugDescription
+                }
+                
+            })
+        }
+        
+        
+    }
+    
+    
     
 }

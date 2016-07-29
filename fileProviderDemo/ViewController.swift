@@ -15,7 +15,7 @@ enum SegueIdentifier: String {
     case SegueToLocalList = "segueToLocalList"
     case SegueToWebDAVList = "segueToWebDAVList"
     case SegueToLocalDetail = "segueToLocalDetail"
-    case SegieToWebDAVDetail = "segueToWebDAVDetail"
+    case SegueToWebDAVDetail = "segueToWebDAVDetail"
 }
 
 class ViewController: UIViewController {
@@ -47,14 +47,20 @@ extension ViewController {
             let alert = SCLAlertView()
             let username = alert.addTextField("username")
             let password = alert.addTextField("password")
-            let path = alert.addTextField("network path")
+            let ipAddr = alert.addTextField("IP Address")
+            let folderPath = alert.addTextField("Folder Path")
             
             alert.showEdit("WebDAV Settings", subTitle: "Enter your WebDAV Settings")
             
             let vc = segue.destinationViewController as! WebDAVTVC
-            vc.setup(username: username.text, password: password.text, path: path.text)
+            vc.setup(username: username.text, password: password.text, ipAddress: ipAddr.text, folderPath: folderPath.text)
             
-    
+        case SegueIdentifier.SegueToWebDAVDetail.rawValue:
+ 
+            
+            let vc = segue.destinationViewController as! WebDAVDetailVC
+
+            
             
         case SegueIdentifier.SegueToLocalList.rawValue:
             

@@ -49,10 +49,10 @@ public class TCPSocketClient: NSObject, NSStreamDelegate {
      * - parameter secure: establishing connection using an SSL/TLS connection
      */
     
-    init?(baseURL: NSURL, secure: Bool = false) {
+    public init?(baseURL: NSURL, secure: Bool = false) {
         self.baseURL = baseURL
         self.secureConnection = secure
-        let scheme = baseURL.scheme.lowercaseString
+        let scheme = baseURL.uw_scheme.lowercaseString
         let defaultPort = secure ? UInt32(TCPSocketClient.securePorts[scheme] ?? 0) : UInt32(TCPSocketClient.ports[scheme] ?? 0)
         self.port = baseURL.port?.unsignedIntValue ?? defaultPort
         if self.port == 0 {

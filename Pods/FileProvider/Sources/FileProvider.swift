@@ -25,7 +25,7 @@ public enum FileType: String {
     case NamedPipe
     case Unknown
     
-    init(urlResourceTypeValue: String) {
+    public init(urlResourceTypeValue: String) {
         switch urlResourceTypeValue {
         case NSURLFileResourceTypeNamedPipe: self = .NamedPipe
         case NSURLFileResourceTypeCharacterSpecial: self = .CharacterSpecial
@@ -39,7 +39,7 @@ public enum FileType: String {
         }
     }
     
-    init(fileTypeValue: String) {
+    public init(fileTypeValue: String) {
         switch fileTypeValue {
         case NSFileTypeCharacterSpecial: self = .CharacterSpecial
         case NSFileTypeDirectory: self = .Directory
@@ -53,7 +53,7 @@ public enum FileType: String {
     }
 }
 
-protocol FoundationErrorEnum {
+public protocol FoundationErrorEnum {
     init? (rawValue: Int)
     var rawValue: Int { get }
 }
@@ -62,17 +62,17 @@ extension NSURLError: FoundationErrorEnum {}
 extension NSCocoaError: FoundationErrorEnum {}
 
 public class FileObject {
-    let absoluteURL: NSURL?
-    let name: String
-    let path: String
-    let size: Int64
-    let createdDate: NSDate?
-    let modifiedDate: NSDate?
-    let fileType: FileType
-    let isHidden: Bool
-    let isReadOnly: Bool
+    public let absoluteURL: NSURL?
+    public let name: String
+    public let path: String
+    public let size: Int64
+    public let createdDate: NSDate?
+    public let modifiedDate: NSDate?
+    public let fileType: FileType
+    public let isHidden: Bool
+    public let isReadOnly: Bool
     
-    init(absoluteURL: NSURL?, name: String, path: String, size: Int64, createdDate: NSDate?, modifiedDate: NSDate?, fileType: FileType, isHidden: Bool, isReadOnly: Bool) {
+    public init(absoluteURL: NSURL?, name: String, path: String, size: Int64, createdDate: NSDate?, modifiedDate: NSDate?, fileType: FileType, isHidden: Bool, isReadOnly: Bool) {
         self.absoluteURL = absoluteURL
         self.name = name
         self.path = path
@@ -84,7 +84,7 @@ public class FileObject {
         self.isReadOnly = isReadOnly
     }
     
-    init(name: String, path: String, createdDate: NSDate?, modifiedDate: NSDate?, isHidden: Bool, isReadOnly: Bool) {
+    public init(name: String, path: String, createdDate: NSDate?, modifiedDate: NSDate?, isHidden: Bool, isReadOnly: Bool) {
         self.absoluteURL = nil
         self.name = name
         self.path = path
@@ -96,11 +96,11 @@ public class FileObject {
         self.isReadOnly = isReadOnly
     }
     
-    var isDirectory: Bool {
+    public var isDirectory: Bool {
         return self.fileType == .Directory
     }
     
-    var isSymLink: Bool {
+    public var isSymLink: Bool {
         return self.fileType == .SymbolicLink
     }
 }
@@ -156,7 +156,7 @@ public protocol FileProvider: FileProviderBasic, FileProviderOperations, FilePro
 }
 
 extension FileProviderBasic {
-    var bareCurrentPath: String {
+    public var bareCurrentPath: String {
         return currentPath.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: ". /"))
     }
     
@@ -168,12 +168,12 @@ extension FileProviderBasic {
             rpath = self.currentPath
         }
         if isPathRelative, let baseURL = baseURL {
-            if rpath.hasPrefix("/") && baseURL.absoluteString.hasSuffix("/") {
+            if rpath.hasPrefix("/") && baseURL.uw_absoluteString.hasSuffix("/") {
                 var npath = rpath
                 npath.removeAtIndex(npath.startIndex)
-                return baseURL.URLByAppendingPathComponent(npath)
+                return baseURL.uw_URLByAppendingPathComponent(npath)
             } else {
-                return baseURL.URLByAppendingPathComponent(rpath)
+                return baseURL.uw_URLByAppendingPathComponent(rpath)
             }
         } else {
             return NSURL(fileURLWithPath: rpath).URLByStandardizingPath!
@@ -181,8 +181,8 @@ extension FileProviderBasic {
     }
     
     public func relativePathOf(url url: NSURL) -> String {
-        guard let baseURL = self.baseURL else { return url.absoluteString }
-        return url.URLByStandardizingPath!.absoluteString.stringByReplacingOccurrencesOfString(baseURL.absoluteString, withString: "/").stringByRemovingPercentEncoding!
+        guard let baseURL = self.baseURL else { return url.uw_absoluteString }
+        return url.URLByStandardizingPath!.uw_absoluteString.stringByReplacingOccurrencesOfString(baseURL.uw_absoluteString, withString: "/").stringByRemovingPercentEncoding!
     }
     
     internal func correctPath(path: String?) -> String? {
@@ -237,7 +237,7 @@ extension FileProviderBasic {
         default:
             domain = NSCocoaErrorDomain
         }
-        return NSError(domain: domain, code: code.rawValue, userInfo: [NSURLErrorFailingURLErrorKey: fileURL, NSURLErrorFailingURLStringErrorKey: fileURL.absoluteString])
+        return NSError(domain: domain, code: code.rawValue, userInfo: [NSURLErrorFailingURLErrorKey: fileURL, NSURLErrorFailingURLStringErrorKey: fileURL.uw_absoluteString])
     }
     
     internal func NotImplemented() {
@@ -293,7 +293,7 @@ public protocol ExtendedFileProvider: FileProvider {
     func propertiesOfFileAtPath(path: String, completionHandler: ((propertiesDictionary: [String: AnyObject], keys: [String], error: ErrorType?) -> Void))
 }
 
-public enum FileOperation {
+public enum FileOperation: CustomStringConvertible {
     case Create (path: String)
     case Copy   (source: String, destination: String)
     case Move   (source: String, destination: String)
@@ -301,7 +301,7 @@ public enum FileOperation {
     case Remove (path: String)
     case Link   (link: String, target: String)
     
-    var description: String {
+    public var description: String {
         switch self {
         case .Create(path: _): return "Create"
         case .Copy(source: _, destination: _): return "Copy"
@@ -312,7 +312,7 @@ public enum FileOperation {
         }
     }
     
-    var actionDescription: String {
+    internal var actionDescription: String {
         switch self {
         case .Create(path: _): return "Creating"
         case .Copy(source: _, destination: _): return "Copying"
@@ -338,4 +338,40 @@ public protocol FileOperationDelegate: class {
     
     /// fileProvider:shouldProceedAfterError:copyingItemAtPath:toPath: gives the delegate an opportunity to recover from or continue copying after an error. If an error occurs, the error object will contain an ErrorType indicating the problem. The source path and destination paths are also provided. If this method returns true, the FileProvider instance will continue as if the error had not occurred. If this method returns false, the NSFileManager instance will stop copying, return false from copyItemAtPath:toPath:error: and the error will be provied there.
     func fileProvider(fileProvider: FileProviderOperations, shouldProceedAfterError error: ErrorType, operation: FileOperation) -> Bool
+}
+
+// THESE ARE METHODS TO PROVIDE COMPATIBILITY WITH SWIFT 2.3 SIMOULTANIOUSLY!
+
+internal extension NSURL {
+    var uw_scheme: String {
+        #if swift(>=2.3)
+            return self.scheme ?? ""
+        #else
+            return self.scheme
+        #endif
+    }
+    
+    var uw_absoluteString: String {
+        #if swift(>=2.3)
+            return self.absoluteString ?? ""
+        #else
+            return self.absoluteString
+        #endif
+    }
+    
+    func uw_URLByAppendingPathComponent(pathComponent: String) -> NSURL {
+        #if swift(>=2.3)
+            return self.URLByAppendingPathComponent(pathComponent)!
+        #else
+            return self.URLByAppendingPathComponent(pathComponent)
+        #endif
+    }
+    
+    func uw_URLByAppendingPathExtension(pathExtension: String) -> NSURL {
+        #if swift(>=2.3)
+            return self.URLByAppendingPathExtension(pathExtension)!
+        #else
+            return self.URLByAppendingPathExtension(pathExtension)
+        #endif
+    }
 }

@@ -19,8 +19,8 @@ public enum FileProviderDropboxErrorCode: Int {
 }
 
 public struct FileProviderDropboxError: ErrorType, CustomStringConvertible {
-    let code: FileProviderDropboxErrorCode
-    let path: String
+    public let code: FileProviderDropboxErrorCode
+    public let path: String
     
     public var description: String {
         switch code {
@@ -36,11 +36,11 @@ public struct FileProviderDropboxError: ErrorType, CustomStringConvertible {
 }
 
 public final class DropboxFileObject: FileObject {
-    let serverTime: NSDate?
-    let id: String?
-    let rev: String?
+    public let serverTime: NSDate?
+    public let id: String?
+    public let rev: String?
     
-    init(absoluteURL: NSURL, name: String, path: String, size: Int64, serverTime: NSDate?, createdDate: NSDate?, modifiedDate: NSDate?, fileType: FileType, isHidden: Bool, isReadOnly: Bool, id: String?, rev: String?) {
+    public init(absoluteURL: NSURL, name: String, path: String, size: Int64, serverTime: NSDate?, createdDate: NSDate?, modifiedDate: NSDate?, fileType: FileType, isHidden: Bool, isReadOnly: Bool, id: String?, rev: String?) {
         self.serverTime = serverTime
         self.id = id
         self.rev = rev
@@ -74,13 +74,13 @@ public class DropboxFileProvider: NSObject,  FileProviderBasic {
         return _session!
     }
     
-    init? (baseURL: NSURL, credential: NSURLCredential?) {
-        if  !["http", "https"].contains(baseURL.scheme.lowercaseString) {
+    public init? (baseURL: NSURL, credential: NSURLCredential?) {
+        if  !["http", "https"].contains(baseURL.uw_scheme.lowercaseString) {
             return nil
         }
         self.baseURL = baseURL
         dispatch_queue = dispatch_queue_create("FileProvider.\(type)", DISPATCH_QUEUE_CONCURRENT)
-        //let url = baseURL.absoluteString
+        //let url = baseURL.uw_absoluteString
         self.credential = credential
     }
     
@@ -203,9 +203,9 @@ extension DropboxFileProvider: FileProviderOperations {
         request.HTTPMethod = "PUT"
         let task = session.uploadTaskWithRequest(request, fromFile: localFile) { (data, response, error) in
             completionHandler?(error: error)
-            self.delegateNotify(.Move(source: localFile.absoluteString, destination: toPath), error: error)
+            self.delegateNotify(.Move(source: localFile.uw_absoluteString, destination: toPath), error: error)
         }
-        task.taskDescription = self.dictionaryToJSON(["type": "Copy", "source": localFile.absoluteString, "dest": toPath])
+        task.taskDescription = self.dictionaryToJSON(["type": "Copy", "source": localFile.uw_absoluteString, "dest": toPath])
         task.resume()
     }
     
@@ -223,7 +223,7 @@ extension DropboxFileProvider: FileProviderOperations {
             }
             completionHandler?(error: error)
         }
-        task.taskDescription = self.dictionaryToJSON(["type": "Copy", "source": path, "dest": toLocalURL.absoluteString])
+        task.taskDescription = self.dictionaryToJSON(["type": "Copy", "source": path, "dest": toLocalURL.uw_absoluteString])
         task.resume()
     }
 }
@@ -254,7 +254,7 @@ extension DropboxFileProvider: FileProviderReadWrite {
                 completionHandler(contents: nil, error: dbError ?? error)
                 return
             }
-            let destURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent(cacheURL.lastPathComponent ?? "tmpfile")
+            let destURL = NSURL(fileURLWithPath: NSTemporaryDirectory()).uw_URLByAppendingPathComponent(cacheURL.lastPathComponent ?? "tmpfile")
             do {
                 try NSFileManager.defaultManager().moveItemAtURL(cacheURL, toURL: destURL)
                 completionHandler(contents: NSData(contentsOfURL: destURL), error: error)
@@ -267,7 +267,7 @@ extension DropboxFileProvider: FileProviderReadWrite {
     
     public func writeContentsAtPath(path: String, contents data: NSData, atomically: Bool = false, completionHandler: SimpleCompletionHandler) {
         NotImplemented()
-        let url = atomically ? absoluteURL(path).URLByAppendingPathExtension("tmp") : absoluteURL(path)
+        let url = atomically ? absoluteURL(path).uw_URLByAppendingPathExtension("tmp") : absoluteURL(path)
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "PUT"
         let task = session.uploadTaskWithRequest(request, fromData: data) { (data, response, error) in

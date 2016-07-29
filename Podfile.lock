@@ -1,5 +1,5 @@
 PODS:
-  - FileProvider (0.3.0)
+  - FileProvider (0.3.2)
   - SCLAlertView (0.5.9)
 
 DEPENDENCIES:
@@ -7,7 +7,7 @@ DEPENDENCIES:
   - SCLAlertView
 
 SPEC CHECKSUMS:
-  FileProvider: 98052d0672ee3b8b400cabfd6d45769dfc4206e7
+  FileProvider: f0ae91c676a6ba052f04952d36193b05ea699ad2
   SCLAlertView: d7c6a48c7d340e60206d4ed0e8ebcbff3b9d2a44
 
 PODFILE CHECKSUM: 0820c8ce2d5cff0cebca8fd53333be3d4b1ca343
