@@ -10,7 +10,7 @@ import UIKit
 import FileProvider
 
 
-class WebDAVDetailVC: UIViewController {
+class WebDAVDetailVC: UIViewController , FileProviderDelegate{
     
     
     @IBOutlet weak var imgView: UIImageView!
@@ -43,6 +43,8 @@ class WebDAVDetailVC: UIViewController {
         
         path = ("http://\(ipAddress)/\(folderPath)")
         
+       
+        
         setupWebDAV()
         
 
@@ -50,14 +52,52 @@ class WebDAVDetailVC: UIViewController {
         getTempFileObject()
         
         
+        
     }
+    
+    func fileproviderSucceed(fileProvider: FileProviderOperations, operation: FileOperation){
+        
+        switch operation {
+        case .Copy(source: let source, destination: let dest):
+            NSLog("\(source) copied to \(dest).")
+        case .Remove(path: let path):
+            NSLog("\(path) has been deleted.")
+        default:
+            break
+        }
+        
+    }
+    func fileproviderFailed(fileProvider: FileProviderOperations, operation: FileOperation){
+        
+        switch operation {
+        case .Copy(source: let source, destination: let dest):
+            NSLog("copy of \(source) failed.")
+        case .Remove(path: let path):
+            NSLog("\(path) can't be deleted.")
+        default:
+            break
+        }
+        
+    }
+    func fileproviderProgress(fileProvider: FileProviderOperations, operation: FileOperation, progress: Float){
+        
+        
+        switch operation {
+        case .Copy(source: let source, destination: let dest):
+            NSLog("Copy\(source) to \(dest): \(progress * 100) completed.")
+        default:
+            break
+        }
+    }
+
+    
     
     
     func setupWebDAV(){
         
         let credential = NSURLCredential(user: username, password: password, persistence: NSURLCredentialPersistence.Permanent)
         fileProvider = WebDAVFileProvider(baseURL: NSURL(string: path)!, credential: credential)
-        
+         fileProvider.delegate = self
         
         
     }
@@ -113,7 +153,5 @@ class WebDAVDetailVC: UIViewController {
         
         
     }
-    
-    
     
 }
