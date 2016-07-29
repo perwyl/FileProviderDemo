@@ -45,7 +45,7 @@ class WebDAVDetailVC: UIViewController {
         
         setupWebDAV()
         
-        sleep(10)
+
         
         getTempFileObject()
         
