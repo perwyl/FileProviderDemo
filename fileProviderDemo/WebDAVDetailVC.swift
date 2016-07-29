@@ -35,17 +35,21 @@ class WebDAVDetailVC: UIViewController {
         
         
         #if PERWYL
-            username = "algoaccess"
-            password = "algoaccess123"
+            username = "temp"
+            password = "temp"
             ipAddress = "192.168.1.127"
-            folderPath = "AlgoAccess"
+            folderPath = "MockShare"
         #endif
         
         path = ("http://\(ipAddress)/\(folderPath)")
         
         setupWebDAV()
         
-        getFileObject()
+        sleep(10)
+        
+        getTempFileObject()
+        
+        
     }
     
     
@@ -54,6 +58,18 @@ class WebDAVDetailVC: UIViewController {
         let credential = NSURLCredential(user: username, password: password, persistence: NSURLCredentialPersistence.Permanent)
         fileProvider = WebDAVFileProvider(baseURL: NSURL(string: path)!, credential: credential)
         
+        
+        
+    }
+    
+    func getTempFileObject(){
+        
+        let tempPath = ("\(path)/temp.jpg")
+        fileProvider.contentsAtPath(tempPath) { (contents, error) in
+            if let img = UIImage(data: contents!){
+                print("Img Recv : \(img.size.height)")
+            }
+        }
     }
     
     
@@ -67,7 +83,11 @@ class WebDAVDetailVC: UIViewController {
             tempPath = fileObject.path
         }
         
+        print("path: \(tempPath)")
+        
         fileProvider.contentsAtPath(tempPath) { (contents, error) in
+            
+            
             
             dispatch_async(dispatch_get_main_queue(),{
                 if (error != nil) {

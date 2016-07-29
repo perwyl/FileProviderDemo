@@ -62,34 +62,13 @@ class WebDAVTVC: UITableViewController {
         
         setupWebDAV()
         
-        //getDirData()
-        
-        getTempObject()
-        
-        
+        getDirData()
+
     }
     
 
     
-    func getTempObject(){
-        
-        path = ("\(path)/temp.jpg")
-        
-        fileProvider.contentsAtPath(path) { (contents, error) in
-            
-            if let data = contents {
-                
-                if let img = UIImage(data: data){
-                    
-                     print("IS Image")
-                }
-               
-                
-                
-            }
-            
-        }
-    }
+
 
     func getDirData(){
         
