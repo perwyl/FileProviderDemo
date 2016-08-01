@@ -37,8 +37,8 @@ class WebDAVDetailVC: UIViewController , FileProviderDelegate{
         #if PERWYL
             username = "algoaccess"
             password = "algoaccess123"
-            ipAddress = "192.168.1.102"
-            folderPath = "dav"
+            ipAddress = "192.168.1.127" //"192.168.1.102"
+            folderPath = "AlgoAccess" //"dav"
         #endif
         
         path = ("http://\(ipAddress)")
@@ -118,7 +118,7 @@ class WebDAVDetailVC: UIViewController , FileProviderDelegate{
         var tempPath:String!
         
         if fileObject == nil {
-            tempPath = ("\(folderPath)/hello2.txt")
+            tempPath = ("\(folderPath)/test.jpg")
         }else {
             tempPath = fileObject.path
         }

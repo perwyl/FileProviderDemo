@@ -45,8 +45,8 @@ class WebDAVTVC: UITableViewController {
         #if PERWYL
             username = "algoaccess"
             password = "algoaccess123"
-            ipAddress = "192.168.1.102"
-            folderPath = "dav"
+            ipAddress = "192.168.1.102" //"192.168.1.102"
+            folderPath = "dav" //"dav"
         #endif
         
         path = ("http://\(ipAddress)")
