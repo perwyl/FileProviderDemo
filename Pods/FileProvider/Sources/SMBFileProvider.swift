@@ -8,6 +8,9 @@
 
 import Foundation
 
+
+extension WebDAVFileProvider: FileProvider {}
+
 public class SMBFileProvider: FileProvider, FileProviderMonitor {
     public var type: String = "Samba"
     public var isPathRelative: Bool = true

@@ -35,13 +35,13 @@ class WebDAVDetailVC: UIViewController , FileProviderDelegate{
         
         
         #if PERWYL
-            username = "temp"
-            password = "temp"
-            ipAddress = "192.168.1.127"
-            folderPath = "MockShare"
+            username = "algoaccess"
+            password = "algoaccess123"
+            ipAddress = "192.168.1.102"
+            folderPath = "dav"
         #endif
         
-        path = ("http://\(ipAddress)/\(folderPath)")
+        path = ("http://\(ipAddress)")
         
        
         
@@ -49,7 +49,7 @@ class WebDAVDetailVC: UIViewController , FileProviderDelegate{
         
 
         
-        getTempFileObject()
+        getFileObject()
         
         
         
@@ -104,7 +104,7 @@ class WebDAVDetailVC: UIViewController , FileProviderDelegate{
     
     func getTempFileObject(){
         
-        let tempPath = ("\(path)/temp.jpg")
+        let tempPath = ("\(folderPath)/hello2.txt")
         fileProvider.contentsAtPath(tempPath) { (contents, error) in
             if let img = UIImage(data: contents!){
                 print("Img Recv : \(img.size.height)")
@@ -118,12 +118,13 @@ class WebDAVDetailVC: UIViewController , FileProviderDelegate{
         var tempPath:String!
         
         if fileObject == nil {
-            tempPath = ("\(path)/temp.jpg")
+            tempPath = ("\(folderPath)/hello2.txt")
         }else {
             tempPath = fileObject.path
         }
         
         print("path: \(tempPath)")
+        
         
         fileProvider.contentsAtPath(tempPath) { (contents, error) in
             
@@ -143,9 +144,12 @@ class WebDAVDetailVC: UIViewController , FileProviderDelegate{
                     }else {
                         
                         self.lblMsg.text = "Not Image File"
+                        
+                        let datastring = String(data: contents!, encoding: NSUTF8StringEncoding)
+                        
+                        self.txtView.text = datastring
                     }
                     
-                    self.txtView.text = contents.debugDescription
                 }
                 
             })

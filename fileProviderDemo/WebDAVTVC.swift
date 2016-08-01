@@ -12,6 +12,8 @@ import UIKit
 import FileProvider
 import SCLAlertView
 
+
+
 class WebDAVTVC: UITableViewController {
     
     var username:String!
@@ -20,7 +22,7 @@ class WebDAVTVC: UITableViewController {
     var ipAddress:String!
     var folderPath:String!
     
-    var fileProvider: WebDAVFileProvider!
+    var fileProvider: FileProvider!
     
     var dirData:[FileObject]!
     
@@ -43,18 +45,18 @@ class WebDAVTVC: UITableViewController {
         #if PERWYL
             username = "algoaccess"
             password = "algoaccess123"
-            ipAddress = "192.168.1.127"
-            folderPath = "AlgoAccess"
+            ipAddress = "192.168.1.102"
+            folderPath = "dav"
         #endif
         
-        path = ("http://\(ipAddress)/\(folderPath)")
+        path = ("http://\(ipAddress)")
         
     }
     
     func setupWebDAV(){
         
         let credential = NSURLCredential(user: username, password: password, persistence: NSURLCredentialPersistence.Permanent)
-        fileProvider = WebDAVFileProvider(baseURL: NSURL(string: path)!, credential: credential)
+        fileProvider = WebDAVFileProvider(baseURL: NSURL(string: path)!, credential: credential) as! FileProvider
   
     }
     
@@ -72,7 +74,7 @@ class WebDAVTVC: UITableViewController {
 
     func getDirData(){
         
-        fileProvider.contentsOfDirectoryAtPath(path) { (contents, error) in
+        fileProvider.contentsOfDirectoryAtPath("/\(folderPath)") { (contents, error) in
             
             if error != nil {
                 
